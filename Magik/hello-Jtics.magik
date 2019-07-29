@@ -1,0 +1,156 @@
+
+#Author : Sadeq Aramideh
+
+remex(:hello_jtics)
+$
+
+def_slotted_exemplar (:hello_jtics,
+		      {
+				{:pid , _unset , :writable}
+			  },
+		      {:tics_proxy_client})
+$
+
+hello_jtics.define_shared_constant(:HELLO_JTICS_PORT, "3040" ,:private)
+$
+hello_jtics.define_shared_constant(:HELLO_JTICS_SERVICE_NAME, "hello_jtics" ,:private)
+$
+
+
+_method hello_jtics.service_ident
+	>> _self.HELLO_JTICS_SERVICE_NAME
+_endmethod
+$
+
+hello_jtics.define_shared_constant(:input_class, acpt_input_stream, _false)
+$
+
+hello_jtics.define_shared_constant(:output_class, acpt_output_stream, _false)
+$
+
+
+_method hello_jtics.run()
+
+	_self.negotiate_protocol(1, 1)
+	query_string << _self.get_chars16()
+	
+	_if query_string _is _unset _orif ~query_string.responds_to?(:size) 
+	_then 
+		_return _self.answer("false" ,  "Bad boy! empty request are forbidden!" )
+	_endif
+	
+	query_string << query_string.trim_spaces()	 
+	write(query_string)
+	
+	result << _self.process_Web_Service(query_string)
+	write( result)
+	_self.put_chars16(result)
+	_self.flush()
+	
+	!terminal!.write("Message Revieved and Result Replied")
+		
+_endmethod
+$
+
+_method hello_jtics.answer( result  , a_message )
+	_return %{+"result".as_json_key+result.write_string.as_json_value+%,+"message".as_json_key+a_message.as_json_value+%}
+_endmethod 
+$
+
+_method hello_jtics.restart()
+	_self.stop()
+	_self.start()
+_endmethod 
+$
+
+_method hello_jtics.start() 
+	_local server
+	system.putenv("HELLO_JTICS_TCP_PORT", _self.HELLO_JTICS_PORT )	
+	server << tics_acp.new(hello_jtics)
+	server.run()
+_endmethod
+$
+ 
+ 
+_method hello_jtics.process_Web_Service( query )
+
+	_return _self.answer ("true" ,"Hello "+ query +"!!! How about some magik coding? it's like ross and rachel relationship!")
+	#_return _self.answer ("true" ,"Hello "+ query)
+	 
+_endmethod 
+$
+
+
+
+_method hello_jtics.stop()
+
+	_if (pid << _self.find_pid()) _is _unset
+	_then 
+		_return 
+	_endif 	
+	_try _with err
+		system.do_command ( "taskkill /PID "+pid.write_string+" /F")
+	_when error
+		#write( err.write_string)
+	_endtry 
+_endmethod 
+$
+
+
+
+_method hello_jtics.find_pid()
+ 
+	system.do_command("del "+system.temp_directory_name+"\"+_self.hello_jtics_TEMP_F_NAME)
+	 
+	cmd << "netstat -ano | find "+%"+_self.hello_jtics_PORT+%"+" >"+system.temp_directory_name+"\"+_self.hello_jtics_TEMP_F_NAME
+	 	
+	(exited,exit_code) << system.do_command(cmd)
+	_if exit_code = 1 _then 
+		write("Error : Command can not performed : "+%newline+cmd)
+		_return _unset
+	_endif 
+
+	_local pid
+	 
+    list_f<< external_text_input_stream.new(system.temp_directory_name+"\"+_self.hello_jtics_TEMP_F_NAME)
+	_protect 
+		_loop 
+			_if  (str << list_f.get_line()) _is _unset _then _leave _endif 
+			write(str)
+			str <<  str.split_by(%space)
+			pid << str[str.size]			
+		_endloop 					  
+	_protection 	  
+		list_f.close()
+	_endprotect
+	 	
+	#write(pid)
+	
+	pid << pid.as_number()
+	_if pid.integral? _andif pid > 0
+	_then 
+		_return  pid
+	_endif 
+	
+	_return _unset 
+		
+		
+_endmethod
+$
+
+
+
+#
+#hello_jtics.auth_login( v , "sade")
+#
+
+_method char16_vector.as_json_key
+	_return %"+_self+%"+%:
+_endmethod
+$
+
+
+_method char16_vector.as_json_value
+	_return %"+_self+%"
+_endmethod
+$
