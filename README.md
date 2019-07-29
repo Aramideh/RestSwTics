@@ -1,2 +1,2 @@
 # RestSwTics
-BootSpring Framework and Swagger Framework mashed Restfull webService for using with Smallworld Tics Connection
+Combination of SprinBoot Framework and Swagger Framework to create a Restfull webService for using with Smallworld Tics Connection
