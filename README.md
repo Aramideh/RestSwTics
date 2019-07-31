@@ -4,7 +4,7 @@ Using open source frameworks like SpringBoot and Swagger this repository demonst
 
 This respository consists of two distinct parts, one is the magik code which will be launched at the smallworld session ( server ) and the standalone SpringBoot application with an elegant user interface which has been provided with the open source Swagger framework( see below image).
 
-<img src="https://github.com/Aramideh/RestSwTics/tree/master/raw/tester.jpg" alt="Image of Application" width="252" height="448">
+<img src="https://github.com/Aramideh/RestSwTics/tree/master/raw/tester.jpg" alt="Image of Application" width="900" height="650">
 
 ### Getting Started
 
