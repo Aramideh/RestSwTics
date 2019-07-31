@@ -17,8 +17,9 @@ MagikSF> hello_jtics.start()
 you will see the message *****"TICS server started"*****  , now if you see this, you are good to go. the default tics server port is *****3040***** , you can change it in the magik file.
 
 * for the SpringBoot standalone application , go to the SpingBoot&Swagger folder and edit *****execute_spring_boot.bat***** file, the java path should be corrected in this file, this application works with *****java 1.8***** . after pointing the bat file to the correct path of java 1.8, just double click and run it, webServer will automatically launch.
-you can view the web methods in *****http://localhost:9090/swagger-ui.html***** ( login info=> user name:User , password:Welcome), if you want to change the port, just change it in the bat file. it's that simple with java and you still sticked to magik!
-currently only the GET method have been included in this repository, but with a little bit of search you can include POST and DELETE methods either or you can chill out untill i have some free time to include them.
+you can view the web methods in *****http://localhost:9090/swagger-ui.html***** ( login info=> user name:User , password:Welcome), if you want to change the port, just change it in the bat file.
+
+currently only the GET method have been included in this repository, but with a little bit of search you can include POST and DELETE methods either or you can chill out untill i include them in this repository.
 
 
 ### Authors
